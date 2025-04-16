@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace movieTasks.Models
 {
@@ -11,6 +12,8 @@ namespace movieTasks.Models
         bool active = true;
 
         static List<User> usersList = new List<User>();
+        private static PasswordHasher<User> hasher = new PasswordHasher<User>();
+
         public User() { }   
 
         public User(int id, string name, string email, string password, bool active)
@@ -18,7 +21,7 @@ namespace movieTasks.Models
             this.id = id;
             this.name = name;
             this.email = email;
-            this.password = password;
+            this.password = hasher.HashPassword(this, password);
             this.active = active;
         }
 
@@ -28,20 +31,54 @@ namespace movieTasks.Models
         public string Password { get => password; set => password = value; }
         public bool Active { get => active; set => active = value; }
 
+        public bool CheckPassword(string userPassword)
+        {
+            var result = hasher.VerifyHashedPassword(this, this.Password, userPassword);
+            return result == PasswordVerificationResult.Success;
+        }
+
+        public void SetPassword(string plainPassword)
+        {
+            this.password = hasher.HashPassword(this, plainPassword);
+        }
 
         public bool Insert()
         {
             foreach (User user in usersList)
             {
-                if (user.id == id)
+                if (user.id == this.id || user.email== this.email)
                 {
                     return false;
                 }
             }
 
+            this.SetPassword(this.Password);
+
             usersList.Add(this);
             return true;
         }
+
+        public bool Register()
+        {
+            if (Insert())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool Login()
+        {
+            foreach (User user in usersList)
+            {
+                if (user.CheckPassword(this.password) && user.email==this.email)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         public List<User> Read()
         {

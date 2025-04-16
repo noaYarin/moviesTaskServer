@@ -2,7 +2,8 @@
 {
     public class Movie
     {
-        string id;
+        static int currentId = 1; 
+        int id;
         string url;
         string primaryTitle;
         string description;
@@ -12,7 +13,7 @@
         string language;
         double budget;
         double grossWorldwide;
-        string[] genres;
+        string genres;
         bool isAdult;
         int runtimeMinutes;
         float averageRating;
@@ -20,11 +21,13 @@
 
         static List<Movie> moviesList = new List<Movie>(); 
 
-        public Movie() { }
+        public Movie() {
+            this.id = currentId++;
+        }
 
-        public Movie(string id, string url, string primaryTitle, string description, string primaryImage, int year, DateTime releaseDate, string language, double budget, double grossWorldwide, string[] genres, bool isAdult, int runtimeMinutes, float averageRating, int numVotes)
+        public Movie(string url, string primaryTitle, string description, string primaryImage, int year, DateTime releaseDate, string language, double budget, double grossWorldwide,string genres, bool isAdult, int runtimeMinutes, float averageRating, int numVotes)
         {
-            this.id = id;
+            this.id = currentId++;
             this.url = url;
             this.primaryTitle = primaryTitle;
             this.description = description;
@@ -41,7 +44,7 @@
             this.numVotes = numVotes;
         }
 
-        public string Id { get => id; set => id = value; }
+        public int Id { get => id; set => id = value; }
         public string Url { get => url; set => url = value; }
         public string PrimaryTitle { get => primaryTitle; set => primaryTitle = value; }
         public string Description { get => description; set => description = value; }
@@ -51,7 +54,7 @@
         public string Language { get => language; set => language = value; }
         public double Budget1 { get => budget; set => budget = value; }
         public double GrossWorldwide { get => grossWorldwide; set => grossWorldwide = value; }
-        public string[] Genres { get => genres; set => genres = value; }
+        public string Genres { get => genres; set => genres = value; }
         public bool IsAdult { get => isAdult; set => isAdult = value; }
         public int RuntimeMinutes { get => runtimeMinutes; set => runtimeMinutes = value; }
         public float AverageRating { get => averageRating; set => averageRating = value; }
@@ -72,7 +75,7 @@
             return true;
         }
 
-        public bool Delete(string id)
+        public bool Delete(int id)
         {
             foreach (Movie movie in moviesList) {
                 if (movie.id == id)

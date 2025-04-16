@@ -17,18 +17,18 @@ namespace movieTasks.Controllers
             return user.Read();
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // POST- login
+        [HttpPost("logIn")]
+        public bool Login([FromBody] User user)
         {
-            return "value";
+            return user.Login();
         }
 
-        // POST api/<UserController>
-        [HttpPost]
-        public bool Post([FromBody] User user)
+        // POST- register
+        [HttpPost("register")]
+        public bool Register([FromBody] User user)
         {
-            return user.Insert();
+            return user.Register();
         }
 
         // PUT api/<UserController>/5

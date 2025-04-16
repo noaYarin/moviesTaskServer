@@ -53,7 +53,7 @@ namespace movieTasks.Controllers
 
         // DELETE api/<MoviesController>/5
         [HttpDelete("{id}")]
-        public bool Delete(string id)
+        public bool Delete(int id)
         {
             Movie movie = new Movie();
            return movie.Delete(id);
