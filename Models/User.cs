@@ -5,6 +5,7 @@ namespace movieTasks.Models
 {
     public class User
     {
+        static int currentId = 1;
         int id;
         string name;
         string email;
@@ -14,11 +15,13 @@ namespace movieTasks.Models
         static List<User> usersList = new List<User>();
         private static PasswordHasher<User> hasher = new PasswordHasher<User>();
 
-        public User() { }   
+        public User() {
+            this.id = currentId++;
+        }   
 
         public User(int id, string name, string email, string password, bool active)
         {
-            this.id = id;
+            this.id = currentId++;
             this.name = name;
             this.email = email;
             this.password = hasher.HashPassword(this, password);
@@ -67,16 +70,16 @@ namespace movieTasks.Models
             return false;
         }
 
-        public bool Login()
+        public User? Login(string password,string email)
         {
             foreach (User user in usersList)
             {
-                if (user.CheckPassword(this.password) && user.email==this.email)
+                if (user.CheckPassword(password) && user.email==email)
                 {
-                    return true;
+                    return user;
                 }
             }
-            return false;
+            return null;
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using movieTasks.Models;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,14 +20,17 @@ namespace movieTasks.Controllers
 
         // POST- login
         [HttpPost("logIn")]
-        public bool Login([FromBody] User user)
+        public User? POST([FromBody] JsonElement data)
         {
-            return user.Login();
+            string email = data.GetProperty("email").GetString();
+            string password = data.GetProperty("password").GetString();
+            User user = new User();
+            return user.Login(password, email);
         }
 
         // POST- register
         [HttpPost("register")]
-        public bool Register([FromBody] User user)
+        public bool POST([FromBody] User user)
         {
             return user.Register();
         }
